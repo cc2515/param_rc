@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RC BOAT PRO</title>
+
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  background:#000;
+  overflow:hidden;
+  font-family:Arial;
+  height:100%;
+}
+
+.remote{
+  width:100vw;
+  height:100vh;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px;
+  box-sizing:border-box;
+  background:linear-gradient(90deg,#111,#222,#111);
+}
+
+.section{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:25px;
+}
+
+.big-btn{
+  width:180px;
+  height:120px;
+  border-radius:20px;
+  font-size:28px;
+  font-weight:bold;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  -webkit-user-select:none;
+  user-select:none;
+  transition:0.1s;
+  box-shadow:0 8px #000;
+}
+
+.big-btn:active{
+  transform:translateY(6px);
+  box-shadow:0 2px #000;
+}
+
+.forward{ background:#2ECC40; }
+.backward{ background:#FF4136; }
+.left{ background:#FF851B; }
+.right{ background:#FFDC00; color:black; }
+
+.center-panel{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:15px;
+}
+
+/* RPM PANEL */
+.rpm-panel{
+  width:240px;
+  background:#111;
+  padding:10px;
+  border-radius:15px;
+  text-align:center;
+  color:#00ffcc;
+  box-shadow:0 0 15px #00ffcc33;
+}
+
+.gauge{
+  width:200px;
+  height:100px;
+  border-top-left-radius:200px;
+  border-top-right-radius:200px;
+  background:#222;
+  position:relative;
+  overflow:hidden;
+  margin:auto;
+}
+
+.needle{
+  width:4px;
+  height:100px;
+  background:red;
+  position:absolute;
+  bottom:0;
+  left:50%;
+  transform-origin:bottom;
+  transform:rotate(-90deg);
+  transition:0.15s ease-out;
+}
+
+/* FUEL */
+.fuel-panel{
+  width:240px;
+  background:#111;
+  padding:10px;
+  border-radius:15px;
+  text-align:center;
+  color:#FFDC00;
+}
+
+.fuel-bar{
+  width:100%;
+  height:12px;
+  background:#222;
+  border-radius:10px;
+  margin-top:6px;
+  overflow:hidden;
+}
+
+.fuel-fill{
+  height:100%;
+  width:100%;
+  background:#2ECC40;
+  transition:0.3s;
+}
+
+/* BUTTON ROW */
+.button-row{
+  width:260px;
+  display:flex;
+  justify-content:space-between;
+}
+
+.ctrl{
+  width:120px;
+  height:45px;
+  border-radius:25px;
+  background:#222;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:14px;
+  cursor:pointer;
+  transition:0.2s;
+  box-shadow:0 0 8px #000 inset;
+}
+
+/* GLOW EFFECT */
+.ctrl.active{
+  background:#2ECC40;
+  box-shadow:
+     0 0 15px #2ECC40,
+     0 0 30px #2ECC40,
+     inset 0 0 10px #fff;
+}
+
+.led-row{
+  display:flex;
+  gap:15px;
+}
+
+.led{
+  width:15px;
+  height:15px;
+  border-radius:50%;
+  background:#222;
+}
+
+.blink{
+  animation:blinkAnim 1s infinite;
+}
+
+@keyframes blinkAnim{
+  0%{opacity:0.2;}
+  50%{opacity:1;}
+  100%{opacity:0.2;}
+}
+
+.red{ background:red; }
+.green{ background:#2ECC40; }
+.blue{ background:#00c3ff; }
+
+</style>
+</head>
+
+<body>
+
+<div class="remote">
+
+<div class="section">
+  <div class="big-btn forward" onmousedown="accelerate('F')" onmouseup="releaseThrottle()">FORWARD</div>
+  <div class="big-btn backward" onmousedown="accelerate('B')" onmouseup="releaseThrottle()">BACK</div>
+</div>
+
+<div class="center-panel">
+
+<div class="led-row">
+  <div id="powerLed" class="led red"></div>
+  <div id="navLed" class="led blue"></div>
+  <div id="engineLed" class="led green"></div>
+</div>
+
+<div class="rpm-panel">
+  ENGINE RPM
+  <div><span id="rpmValue">0</span> RPM</div>
+  <div class="gauge">
+    <div class="needle" id="needle"></div>
+  </div>
+</div>
+
+<div class="fuel-panel">
+  FUEL
+  <div class="fuel-bar">
+    <div class="fuel-fill" id="fuelFill"></div>
+  </div>
+</div>
+
+<div class="button-row">
+  <div class="ctrl" id="engineBtn" onclick="toggleEngine()">ENGINE</div>
+  <div class="ctrl" id="navBtn" onclick="toggleNav()">NAV LIGHTS</div>
+</div>
+
+<div class="button-row">
+  <div class="ctrl" onclick="fogSignal()">FOG</div>
+  <div class="ctrl" onclick="horn()">HORN</div>
+</div>
+
+<div class="button-row">
+  <div class="ctrl" onclick="anchor()">ANCHOR</div>
+  <div class="ctrl" onclick="emergencyStop()">STOP</div>
+</div>
+
+</div>
+
+<div class="section">
+  <div class="big-btn left" onmousedown="accelerate('L')" onmouseup="releaseThrottle()">LEFT</div>
+  <div class="big-btn right" onmousedown="accelerate('R')" onmouseup="releaseThrottle()">RIGHT</div>
+</div>
+
+</div>
+
+<script>
+
+const ESP32_IP="10.136.228.37";
+function send(cmd){
+ fetch(`http://${ESP32_IP}/command?cmd=${cmd}`).catch(()=>{});
+}
+
+/* ENGINE SYSTEM */
+let rpm=0;
+let targetRPM=0;
+let engineOn=false;
+let navOn=false;
+
+/* SMOOTH RPM CONTROL */
+setInterval(()=>{
+ if(rpm<targetRPM) rpm+=50;
+ else if(rpm>targetRPM) rpm-=30;
+
+ if(rpm<0) rpm=0;
+ updateRPM();
+},50);
+
+function updateRPM(){
+ document.getElementById("rpmValue").innerText=Math.round(rpm);
+ let angle=(rpm/6000)*180-90;
+ document.getElementById("needle").style.transform="rotate("+angle+"deg)";
+}
+
+function accelerate(cmd){
+ if(!engineOn) return;
+ send(cmd);
+ targetRPM=4500;
+}
+
+function releaseThrottle(){
+ if(engineOn){
+   targetRPM=1000; // idle
+ }
+ send("STOP");
+}
+
+/* ENGINE TOGGLE */
+function toggleEngine(){
+ engineOn=!engineOn;
+ let led=document.getElementById("engineLed");
+ let powerLed=document.getElementById("powerLed");
+ let engineBtn=document.getElementById("engineBtn");
+
+ if(engineOn){
+   targetRPM=1000;
+   led.classList.add("blink");
+   engineBtn.classList.add("active");
+   powerLed.style.background="#2ECC40";
+   send("E_ON");
+ }else{
+   targetRPM=0;
+   led.classList.remove("blink");
+   engineBtn.classList.remove("active");
+   powerLed.style.background="red";
+   send("E_OFF");
+ }
+}
+
+/* NAV TOGGLE FIXED */
+function toggleNav(){
+ navOn=!navOn;
+ let navLed=document.getElementById("navLed");
+ let navBtn=document.getElementById("navBtn");
+
+ if(navOn){
+   navLed.classList.add("blink");
+   navBtn.classList.add("active");
+   send("N_ON");
+ }else{
+   navLed.classList.remove("blink");
+   navBtn.classList.remove("active");
+   send("N_OFF");
+ }
+}
+
+function horn(){ send("HORN"); }
+function fogSignal(){ send("FOG"); }
+
+function anchor(){
+ targetRPM=1000;
+ alert("⚓ Anchor Deployed");
+}
+
+function emergencyStop(){
+ targetRPM=0;
+ engineOn=false;
+ navOn=false;
+
+ document.getElementById("engineLed").classList.remove("blink");
+ document.getElementById("navLed").classList.remove("blink");
+ document.getElementById("engineBtn").classList.remove("active");
+ document.getElementById("navBtn").classList.remove("active");
+ document.getElementById("powerLed").style.background="red";
+
+ send("STOP");
+ send("E_OFF");
+ send("N_OFF");
+}
+
+</script>
+
+</body>
+</html>
