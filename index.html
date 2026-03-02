@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>RC BOAT PRO</title>
 
 <style>
+
+/* ===== GLOBAL ===== */
 html,body{
   margin:0;
   padding:0;
@@ -12,8 +14,26 @@ html,body{
   overflow:hidden;
   font-family:Arial;
   height:100%;
+  -webkit-user-select:none;
+  user-select:none;
 }
 
+/* LANDSCAPE WARNING */
+#rotateMessage{
+  position:fixed;
+  inset:0;
+  background:#000;
+  color:#fff;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  font-size:22px;
+  z-index:9999;
+  padding:20px;
+}
+
+/* MAIN REMOTE */
 .remote{
   width:100vw;
   height:100vh;
@@ -42,8 +62,6 @@ html,body{
   justify-content:center;
   align-items:center;
   cursor:pointer;
-  -webkit-user-select:none;
-  user-select:none;
   transition:0.1s;
   box-shadow:0 8px #000;
 }
@@ -65,16 +83,16 @@ html,body{
   gap:15px;
 }
 
-/* RPM PANEL */
-.rpm-panel{
+.rpm-panel,.fuel-panel{
   width:240px;
   background:#111;
   padding:10px;
   border-radius:15px;
   text-align:center;
-  color:#00ffcc;
-  box-shadow:0 0 15px #00ffcc33;
 }
+
+.rpm-panel{ color:#00ffcc; box-shadow:0 0 15px #00ffcc33; }
+.fuel-panel{ color:#FFDC00; }
 
 .gauge{
   width:200px;
@@ -99,16 +117,6 @@ html,body{
   transition:0.15s ease-out;
 }
 
-/* FUEL */
-.fuel-panel{
-  width:240px;
-  background:#111;
-  padding:10px;
-  border-radius:15px;
-  text-align:center;
-  color:#FFDC00;
-}
-
 .fuel-bar{
   width:100%;
   height:12px;
@@ -125,7 +133,6 @@ html,body{
   transition:0.3s;
 }
 
-/* BUTTON ROW */
 .button-row{
   width:260px;
   display:flex;
@@ -144,10 +151,8 @@ html,body{
   font-size:14px;
   cursor:pointer;
   transition:0.2s;
-  box-shadow:0 0 8px #000 inset;
 }
 
-/* GLOW EFFECT */
 .ctrl.active{
   background:#2ECC40;
   box-shadow:
@@ -182,18 +187,61 @@ html,body{
 .green{ background:#2ECC40; }
 .blue{ background:#00c3ff; }
 
+/* ===== RESPONSIVE ===== */
+@media(max-width:1100px){
+  .big-btn{
+    width:140px;
+    height:90px;
+    font-size:20px;
+  }
+  .rpm-panel,.fuel-panel{
+    width:200px;
+  }
+}
+
+@media(max-width:800px){
+  .remote{
+    padding:10px;
+  }
+  .big-btn{
+    width:110px;
+    height:75px;
+    font-size:16px;
+  }
+  .button-row{
+    width:200px;
+  }
+  .ctrl{
+    width:95px;
+    height:38px;
+    font-size:12px;
+  }
+}
+
+@media (orientation:portrait){
+  #rotateMessage{
+    display:flex;
+  }
+}
+
 </style>
 </head>
 
-<body>
+<body oncontextmenu="return false">
+
+<div id="rotateMessage">
+⚠ Please rotate your device to Landscape Mode to use RC BOAT PRO
+</div>
 
 <div class="remote">
 
+<!-- LEFT SIDE -->
 <div class="section">
   <div class="big-btn forward" onmousedown="accelerate('F')" onmouseup="releaseThrottle()">FORWARD</div>
   <div class="big-btn backward" onmousedown="accelerate('B')" onmouseup="releaseThrottle()">BACK</div>
 </div>
 
+<!-- CENTER -->
 <div class="center-panel">
 
 <div class="led-row">
@@ -234,6 +282,7 @@ html,body{
 
 </div>
 
+<!-- RIGHT SIDE -->
 <div class="section">
   <div class="big-btn left" onmousedown="accelerate('L')" onmouseup="releaseThrottle()">LEFT</div>
   <div class="big-btn right" onmousedown="accelerate('R')" onmouseup="releaseThrottle()">RIGHT</div>
@@ -243,80 +292,84 @@ html,body{
 
 <script>
 
+/* ===== PREVENT COPY & INSPECT ===== */
+document.addEventListener('keydown', function(e) {
+ if (e.key === "F12" || 
+    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+    (e.ctrlKey && e.key === 'u')) {
+   e.preventDefault();
+ }
+});
+
+/* ===== ESP SETTINGS ===== */
 const ESP32_IP="172.27.4.37";
+let lastCommand="";
+let commandLock=false;
+
 function send(cmd){
+ if(commandLock && cmd===lastCommand) return;
+ lastCommand=cmd;
+ commandLock=true;
+ setTimeout(()=>commandLock=false,200);
  fetch(`http://${ESP32_IP}/command?cmd=${cmd}`).catch(()=>{});
 }
 
 /* ENGINE SYSTEM */
-let rpm=0;
-let targetRPM=0;
-let engineOn=false;
-let navOn=false;
+let rpm=0,targetRPM=0,engineOn=false,navOn=false;
 
-/* SMOOTH RPM CONTROL */
 setInterval(()=>{
  if(rpm<targetRPM) rpm+=50;
  else if(rpm>targetRPM) rpm-=30;
-
  if(rpm<0) rpm=0;
- updateRPM();
-},50);
-
-function updateRPM(){
  document.getElementById("rpmValue").innerText=Math.round(rpm);
  let angle=(rpm/6000)*180-90;
  document.getElementById("needle").style.transform="rotate("+angle+"deg)";
-}
+},50);
 
 function accelerate(cmd){
  if(!engineOn) return;
- send(cmd);
  targetRPM=4500;
+ send(cmd);
 }
 
 function releaseThrottle(){
- if(engineOn){
-   targetRPM=1000; // idle
- }
+ if(engineOn) targetRPM=1000;
  send("STOP");
 }
 
-/* ENGINE TOGGLE */
 function toggleEngine(){
  engineOn=!engineOn;
  let led=document.getElementById("engineLed");
  let powerLed=document.getElementById("powerLed");
- let engineBtn=document.getElementById("engineBtn");
+ let btn=document.getElementById("engineBtn");
 
  if(engineOn){
    targetRPM=1000;
    led.classList.add("blink");
-   engineBtn.classList.add("active");
+   btn.classList.add("active");
    powerLed.style.background="#2ECC40";
    send("E_ON");
  }else{
    targetRPM=0;
    led.classList.remove("blink");
-   engineBtn.classList.remove("active");
+   btn.classList.remove("active");
    powerLed.style.background="red";
    send("E_OFF");
  }
 }
 
-/* NAV TOGGLE FIXED */
 function toggleNav(){
  navOn=!navOn;
- let navLed=document.getElementById("navLed");
- let navBtn=document.getElementById("navBtn");
+ let led=document.getElementById("navLed");
+ let btn=document.getElementById("navBtn");
 
  if(navOn){
-   navLed.classList.add("blink");
-   navBtn.classList.add("active");
+   led.classList.add("blink");
+   btn.classList.add("active");
    send("N_ON");
  }else{
-   navLed.classList.remove("blink");
-   navBtn.classList.remove("active");
+   led.classList.remove("blink");
+   btn.classList.remove("active");
    send("N_OFF");
  }
 }
@@ -333,13 +386,9 @@ function emergencyStop(){
  targetRPM=0;
  engineOn=false;
  navOn=false;
-
- document.getElementById("engineLed").classList.remove("blink");
- document.getElementById("navLed").classList.remove("blink");
- document.getElementById("engineBtn").classList.remove("active");
- document.getElementById("navBtn").classList.remove("active");
+ document.querySelectorAll(".blink").forEach(el=>el.classList.remove("blink"));
+ document.querySelectorAll(".active").forEach(el=>el.classList.remove("active"));
  document.getElementById("powerLed").style.background="red";
-
  send("STOP");
  send("E_OFF");
  send("N_OFF");
@@ -349,4 +398,3 @@ function emergencyStop(){
 
 </body>
 </html>
-
