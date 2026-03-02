@@ -1,233 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>RC BOAT PRO</title>
 
 <style>
-
-/* ===== GLOBAL ===== */
 html,body{
   margin:0;
   padding:0;
   background:#000;
   font-family:Arial;
-  min-height:100vh;
-  height:100dvh;
-  overflow:auto;
-  -webkit-user-select:none;
-  user-select:none;
-}
-
-/* ROTATE MESSAGE */
-#rotateMessage{
-  position:fixed;
-  inset:0;
-  background:#000;
-  color:#fff;
-  display:none;
+  overflow:hidden;
+  height:100vh;
+  width:100vw;
+  display:flex;
   justify-content:center;
   align-items:center;
-  text-align:center;
-  font-size:22px;
-  z-index:9999;
+  color:white;
 }
 
-@media (orientation:portrait){
-  #rotateMessage{ display:flex; }
-}
-
-/* MAIN REMOTE */
+/* MAIN LAYOUT */
 .remote{
-  width:100%;
-  min-height:100dvh;
+  width:100vw;
+  height:100vh;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:20px;
+  padding:2vh;
   box-sizing:border-box;
-  background:linear-gradient(90deg,#111,#222,#111);
 }
 
-.section{
+/* SIDE CONTROL */
+.side{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:25px;
-}
-
-.big-btn{
-  width:180px;
-  height:120px;
-  border-radius:20px;
-  font-size:28px;
-  font-weight:bold;
-  display:flex;
   justify-content:center;
-  align-items:center;
-  cursor:pointer;
-  transition:0.1s;
-  box-shadow:0 8px #000;
+  gap:2vh;
+  width:25vw;
 }
-
-.big-btn:active{
-  transform:translateY(6px);
-  box-shadow:0 2px #000;
-}
-
-.forward{ background:#2ECC40; }
-.backward{ background:#FF4136; }
-.left{ background:#FF851B; }
-.right{ background:#FFDC00; color:black; }
 
 /* CENTER PANEL */
-.center-panel{
+.panel{
+  width:40vw;
+  height:90vh;
+  background:linear-gradient(145deg,#111,#1c1c1c);
+  border-radius:20px;
+  box-shadow:
+    inset 0 0 30px #000,
+    0 0 20px #00bfff;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:15px;
+  justify-content:space-evenly;
+  padding:2vh;
+  box-sizing:border-box;
 }
 
-/* ===== LED PANEL ===== */
-.led-row{
-  display:flex;
-  gap:12px;
-}
-
-.led{
-  width:15px;
-  height:15px;
-  border-radius:50%;
-  background:#222;
-  box-shadow:0 0 5px #000 inset;
-}
-
-.blink{
-  animation:blinkAnim 1s infinite;
-}
-
-@keyframes blinkAnim{
-  0%{opacity:0.2;}
-  50%{opacity:1;}
-  100%{opacity:0.2;}
-}
-
-/* ===== 3D RPM GAUGE ===== */
-.rpm-panel{
-  width:260px;
-  background:#111;
-  padding:15px;
+/* BIG CONTROL BUTTONS */
+.btn{
+  width:70%;
+  padding:2vh;
+  font-size:2vh;
+  border:none;
   border-radius:15px;
-  text-align:center;
-  color:#00ffcc;
-  box-shadow:0 0 20px #00ffcc33 inset, 0 0 15px #000;
-}
-
-.gauge{
-  width:220px;
-  height:120px;
-  border-top-left-radius:220px;
-  border-top-right-radius:220px;
-  background:radial-gradient(circle at center bottom,#333 0%,#111 70%);
-  position:relative;
-  margin:auto;
-  overflow:hidden;
-  border:4px solid #444;
-}
-
-.needle{
-  width:4px;
-  height:110px;
-  background:linear-gradient(red,darkred);
-  position:absolute;
-  bottom:0;
-  left:50%;
-  transform-origin:bottom;
-  transform:rotate(-90deg);
-  transition:0.15s ease-out;
-  box-shadow:0 0 10px red;
-}
-
-.center-dot{
-  width:14px;
-  height:14px;
-  background:#888;
-  border-radius:50%;
-  position:absolute;
-  bottom:-7px;
-  left:calc(50% - 7px);
-  box-shadow:0 0 5px #000 inset;
-}
-
-/* ===== FUEL ===== */
-.fuel-panel{
-  width:260px;
-  background:#111;
-  padding:10px;
-  border-radius:15px;
-  text-align:center;
-  color:#FFDC00;
-}
-
-.fuel-bar{
-  width:100%;
-  height:12px;
-  background:#222;
-  border-radius:10px;
-  overflow:hidden;
-}
-
-.fuel-fill{
-  height:100%;
-  width:100%;
-  background:linear-gradient(90deg,#2ECC40,#00ff99);
-}
-
-/* ===== BUTTONS ===== */
-.button-row{
-  width:280px;
-  display:flex;
-  justify-content:space-between;
-}
-
-.ctrl{
-  width:130px;
-  height:40px;
-  border-radius:20px;
   background:#222;
   color:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:13px;
-  cursor:pointer;
+  box-shadow:0 0 10px #000;
+  transition:0.2s;
 }
 
+.btn:active{
+  transform:scale(0.95);
+}
+
+.active{
+  background:#00ff88 !important;
+  box-shadow:0 0 20px #00ff88;
+  color:black;
+}
+
+/* SMALL BRIDGE BUTTONS */
 .small-btn{
-  width:90px;
-  height:32px;
-  font-size:11px;
-  border-radius:15px;
-  background:#1a1a1a;
-  color:#ccc;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  cursor:pointer;
+  width:80%;
+  padding:1vh;
+  font-size:1.5vh;
+  border:none;
+  border-radius:10px;
+  background:#333;
+  color:white;
+  transition:0.2s;
 }
 
 .small-btn.active{
-  background:#2ECC40;
-  color:#000;
-  box-shadow:0 0 10px #2ECC40;
+  background:#00ccff;
+  box-shadow:0 0 15px #00ccff;
 }
 
-.bridge-row{
-  width:300px;
+/* ROUND GAP BUTTONS */
+.circle{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:#222;
+  border:none;
+  color:white;
+  font-size:1.8vh;
+  box-shadow:0 0 15px #000;
+  transition:0.2s;
+}
+
+.circle.active{
+  background:#ffcc00;
+  box-shadow:0 0 20px #ffcc00;
+  color:black;
+}
+
+/* AUTO MANUAL TOGGLE */
+.toggle{
+  width:80%;
   display:flex;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:6px;
+  border-radius:30px;
+  overflow:hidden;
+  border:2px solid #00bfff;
+}
+
+.toggle button{
+  flex:1;
+  padding:1vh;
+  background:#111;
+  color:white;
+  border:none;
+  font-size:1.6vh;
+}
+
+.toggle .selected{
+  background:#00bfff;
+  color:black;
+}
+
+/* 3D ANALOG */
+.analog{
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#444,#111);
+  box-shadow:
+    inset -10px -10px 20px #000,
+    inset 10px 10px 20px #333,
+    0 0 20px #00bfff;
+  position:relative;
+}
+
+.needle{
+  width:6px;
+  height:70px;
+  background:red;
+  position:absolute;
+  bottom:50%;
+  left:50%;
+  transform-origin:bottom;
+  transform:translateX(-50%) rotate(0deg);
+  border-radius:3px;
+}
+
+/* blinking nav light */
+.blink{
+  animation:blink 1s infinite;
+}
+
+@keyframes blink{
+  0%{opacity:1;}
+  50%{opacity:0.3;}
+  100%{opacity:1;}
 }
 
 </style>
@@ -235,126 +180,76 @@ html,body{
 
 <body>
 
-<div id="rotateMessage">
-⚠ Please rotate your device to Landscape Mode
-</div>
-
 <div class="remote">
 
-<!-- LEFT -->
-<div class="section">
-  <div class="big-btn forward" id="forwardBtn">FORWARD</div>
-  <div class="big-btn backward" id="backBtn">BACK</div>
-</div>
-
-<!-- CENTER -->
-<div class="center-panel">
-
-<div class="led-row">
-  <div id="powerLed" class="led"></div>
-  <div id="navLed" class="led"></div>
-  <div id="radarLed" class="led"></div>
-  <div id="bilgeLed" class="led"></div>
-</div>
-
-<div class="rpm-panel">
-  ENGINE RPM
-  <div><span id="rpmValue">0</span> RPM</div>
-  <div class="gauge">
-    <div class="needle" id="needle"></div>
-    <div class="center-dot"></div>
+  <!-- LEFT SIDE -->
+  <div class="side">
+    <button class="btn" onclick="toggle(this)">LEFT</button>
+    <button class="circle" onclick="toggle(this)">C1</button>
+    <button class="btn" onclick="toggle(this)">RIGHT</button>
   </div>
-</div>
 
-<div class="fuel-panel">
-  FUEL
-  <div class="fuel-bar">
-    <div class="fuel-fill"></div>
+  <!-- CENTER PANEL -->
+  <div class="panel">
+
+    <h2>⚓ RC BOAT PRO</h2>
+
+    <div class="analog">
+      <div class="needle" id="needle"></div>
+    </div>
+
+    <!-- AUTO MANUAL -->
+    <div class="toggle">
+      <button id="manual" class="selected" onclick="selectMode('manual')">MANUAL</button>
+      <button id="auto" onclick="selectMode('auto')">AUTO</button>
+    </div>
+
+    <!-- MAIN BUTTONS -->
+    <button class="small-btn" onclick="toggle(this)">ENGINE</button>
+    <button class="small-btn blink" onclick="toggle(this)">NAV LIGHT</button>
+    <button class="small-btn" onclick="toggle(this)">ANCHOR</button>
+    <button class="small-btn" onclick="toggle(this)">HORN</button>
+    <button class="small-btn" onclick="toggle(this)">TEST</button>
+    <button class="small-btn" onclick="toggle(this)">CHECK</button>
+
   </div>
-</div>
 
-<div class="button-row">
-  <div class="ctrl" id="engineBtn">ENGINE</div>
-  <div class="ctrl" id="navBtn">NAV LIGHTS</div>
-</div>
-
-<!-- BRIDGE CONTROLS -->
-<div class="bridge-row">
-  <div class="small-btn" id="testBtn">TEST</div>
-  <div class="small-btn" id="autoBtn">AUTO</div>
-  <div class="small-btn" id="radarBtn">RADAR</div>
-  <div class="small-btn" id="bilgeBtn">BILGE</div>
-  <div class="small-btn" id="deckBtn">DECK</div>
-  <div class="small-btn" id="cabinBtn">CABIN</div>
-</div>
-
-</div>
-
-<!-- RIGHT -->
-<div class="section">
-  <div class="big-btn left" id="leftBtn">LEFT</div>
-  <div class="big-btn right" id="rightBtn">RIGHT</div>
-</div>
+  <!-- RIGHT SIDE -->
+  <div class="side">
+    <button class="btn" onclick="toggle(this)">FWD</button>
+    <button class="circle" onclick="toggle(this)">C2</button>
+    <button class="btn" onclick="toggle(this)">BWD</button>
+  </div>
 
 </div>
 
 <script>
 
-const ESP32_IP="172.27.4.37";
-function send(cmd){
- fetch(`http://${ESP32_IP}/command?cmd=${cmd}`).catch(()=>{});
+/* Toggle buttons glow */
+function toggle(el){
+  el.classList.toggle("active");
 }
 
-let rpm=0,targetRPM=0,engineOn=false;
+/* Auto Manual selection */
+function selectMode(mode){
+  document.getElementById("manual").classList.remove("selected");
+  document.getElementById("auto").classList.remove("selected");
 
+  if(mode==="manual"){
+    document.getElementById("manual").classList.add("selected");
+  }else{
+    document.getElementById("auto").classList.add("selected");
+  }
+}
+
+/* Analog animation */
+let angle=0;
 setInterval(()=>{
- if(rpm<targetRPM) rpm+=60;
- else if(rpm>targetRPM) rpm-=40;
- if(rpm<0) rpm=0;
- document.getElementById("rpmValue").innerText=Math.round(rpm);
- let angle=(rpm/6000)*180-90;
- document.getElementById("needle").style.transform="rotate("+angle+"deg)";
-},40);
-
-function press(cmd){
- if(!engineOn) return;
- targetRPM=4500;
- send(cmd);
-}
-
-function release(){
- if(engineOn) targetRPM=1000;
- send("STOP");
-}
-
-["forwardBtn","backBtn","leftBtn","rightBtn"].forEach(id=>{
- let btn=document.getElementById(id);
- btn.addEventListener("mousedown",()=>press(btn.innerText[0]));
- btn.addEventListener("mouseup",release);
- btn.addEventListener("touchstart",(e)=>{e.preventDefault();press(btn.innerText[0]);});
- btn.addEventListener("touchend",(e)=>{e.preventDefault();release();});
-});
-
-document.getElementById("engineBtn").onclick=function(){
- engineOn=!engineOn;
- this.classList.toggle("active");
- document.getElementById("powerLed").style.background=engineOn?"#2ECC40":"red";
- send(engineOn?"E_ON":"E_OFF");
- targetRPM=engineOn?1000:0;
-};
-
-document.getElementById("navBtn").onclick=function(){
- this.classList.toggle("active");
- document.getElementById("navLed").classList.toggle("blink");
-};
-
-["testBtn","autoBtn","radarBtn","bilgeBtn","deckBtn","cabinBtn"].forEach(id=>{
- document.getElementById(id).onclick=function(){
-   this.classList.toggle("active");
-   if(id==="radarBtn") document.getElementById("radarLed").classList.toggle("blink");
-   if(id==="bilgeBtn") document.getElementById("bilgeLed").classList.toggle("blink");
- };
-});
+  angle+=5;
+  if(angle>180) angle=0;
+  document.getElementById("needle").style.transform=
+  "translateX(-50%) rotate("+angle+"deg)";
+},200);
 
 </script>
 
