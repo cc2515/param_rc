@@ -243,7 +243,7 @@ html,body{
 
 <script>
 
-const ESP32_IP="10.136.228.37";
+const ESP32_IP="172.27.4.37";
 function send(cmd){
  fetch(`http://${ESP32_IP}/command?cmd=${cmd}`).catch(()=>{});
 }
@@ -349,3 +349,4 @@ function emergencyStop(){
 
 </body>
 </html>
+
