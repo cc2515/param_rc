@@ -13,13 +13,13 @@ html,body{
   background:#000;
   font-family:Arial;
   min-height:100vh;
-  height:100dvh;              /* FIXED MOBILE HEIGHT */
-  overflow:auto;              /* allow scroll on small phones */
+  height:100dvh;
+  overflow:auto;
   -webkit-user-select:none;
   user-select:none;
 }
 
-/* LANDSCAPE WARNING */
+/* ROTATE MESSAGE */
 #rotateMessage{
   position:fixed;
   inset:0;
@@ -31,13 +31,16 @@ html,body{
   text-align:center;
   font-size:22px;
   z-index:9999;
-  padding:20px;
+}
+
+@media (orientation:portrait){
+  #rotateMessage{ display:flex; }
 }
 
 /* MAIN REMOTE */
 .remote{
   width:100%;
-  min-height:100dvh;          /* FIX */
+  min-height:100dvh;
   display:flex;
   justify-content:space-between;
   align-items:center;
@@ -77,6 +80,7 @@ html,body{
 .left{ background:#FF851B; }
 .right{ background:#FFDC00; color:black; }
 
+/* CENTER PANEL */
 .center-panel{
   display:flex;
   flex-direction:column;
@@ -84,87 +88,10 @@ html,body{
   gap:15px;
 }
 
-.rpm-panel,.fuel-panel{
-  width:240px;
-  background:#111;
-  padding:10px;
-  border-radius:15px;
-  text-align:center;
-}
-
-.rpm-panel{ color:#00ffcc; box-shadow:0 0 15px #00ffcc33; }
-.fuel-panel{ color:#FFDC00; }
-
-.gauge{
-  width:200px;
-  height:100px;
-  border-top-left-radius:200px;
-  border-top-right-radius:200px;
-  background:#222;
-  position:relative;
-  overflow:hidden;
-  margin:auto;
-}
-
-.needle{
-  width:4px;
-  height:100px;
-  background:red;
-  position:absolute;
-  bottom:0;
-  left:50%;
-  transform-origin:bottom;
-  transform:rotate(-90deg);
-  transition:0.15s ease-out;
-}
-
-.fuel-bar{
-  width:100%;
-  height:12px;
-  background:#222;
-  border-radius:10px;
-  margin-top:6px;
-  overflow:hidden;
-}
-
-.fuel-fill{
-  height:100%;
-  width:100%;
-  background:#2ECC40;
-  transition:0.3s;
-}
-
-.button-row{
-  width:260px;
-  display:flex;
-  justify-content:space-between;
-}
-
-.ctrl{
-  width:120px;
-  height:45px;
-  border-radius:25px;
-  background:#222;
-  color:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:14px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.ctrl.active{
-  background:#2ECC40;
-  box-shadow:
-     0 0 15px #2ECC40,
-     0 0 30px #2ECC40,
-     inset 0 0 10px #fff;
-}
-
+/* ===== LED PANEL ===== */
 .led-row{
   display:flex;
-  gap:15px;
+  gap:12px;
 }
 
 .led{
@@ -172,6 +99,7 @@ html,body{
   height:15px;
   border-radius:50%;
   background:#222;
+  box-shadow:0 0 5px #000 inset;
 }
 
 .blink{
@@ -184,17 +112,122 @@ html,body{
   100%{opacity:0.2;}
 }
 
-@media (orientation:portrait){
-  #rotateMessage{
-    display:flex;
-  }
+/* ===== 3D RPM GAUGE ===== */
+.rpm-panel{
+  width:260px;
+  background:#111;
+  padding:15px;
+  border-radius:15px;
+  text-align:center;
+  color:#00ffcc;
+  box-shadow:0 0 20px #00ffcc33 inset, 0 0 15px #000;
 }
 
-/* Small phone padding adjust only */
-@media(max-width:900px){
-  .remote{
-    padding:10px;
-  }
+.gauge{
+  width:220px;
+  height:120px;
+  border-top-left-radius:220px;
+  border-top-right-radius:220px;
+  background:radial-gradient(circle at center bottom,#333 0%,#111 70%);
+  position:relative;
+  margin:auto;
+  overflow:hidden;
+  border:4px solid #444;
+}
+
+.needle{
+  width:4px;
+  height:110px;
+  background:linear-gradient(red,darkred);
+  position:absolute;
+  bottom:0;
+  left:50%;
+  transform-origin:bottom;
+  transform:rotate(-90deg);
+  transition:0.15s ease-out;
+  box-shadow:0 0 10px red;
+}
+
+.center-dot{
+  width:14px;
+  height:14px;
+  background:#888;
+  border-radius:50%;
+  position:absolute;
+  bottom:-7px;
+  left:calc(50% - 7px);
+  box-shadow:0 0 5px #000 inset;
+}
+
+/* ===== FUEL ===== */
+.fuel-panel{
+  width:260px;
+  background:#111;
+  padding:10px;
+  border-radius:15px;
+  text-align:center;
+  color:#FFDC00;
+}
+
+.fuel-bar{
+  width:100%;
+  height:12px;
+  background:#222;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.fuel-fill{
+  height:100%;
+  width:100%;
+  background:linear-gradient(90deg,#2ECC40,#00ff99);
+}
+
+/* ===== BUTTONS ===== */
+.button-row{
+  width:280px;
+  display:flex;
+  justify-content:space-between;
+}
+
+.ctrl{
+  width:130px;
+  height:40px;
+  border-radius:20px;
+  background:#222;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.small-btn{
+  width:90px;
+  height:32px;
+  font-size:11px;
+  border-radius:15px;
+  background:#1a1a1a;
+  color:#ccc;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+}
+
+.small-btn.active{
+  background:#2ECC40;
+  color:#000;
+  box-shadow:0 0 10px #2ECC40;
+}
+
+.bridge-row{
+  width:300px;
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:6px;
 }
 
 </style>
@@ -203,22 +236,25 @@ html,body{
 <body>
 
 <div id="rotateMessage">
-⚠ Please rotate your device to Landscape Mode to use RC BOAT PRO
+⚠ Please rotate your device to Landscape Mode
 </div>
 
 <div class="remote">
 
+<!-- LEFT -->
 <div class="section">
   <div class="big-btn forward" id="forwardBtn">FORWARD</div>
   <div class="big-btn backward" id="backBtn">BACK</div>
 </div>
 
+<!-- CENTER -->
 <div class="center-panel">
 
 <div class="led-row">
-  <div id="powerLed" class="led red"></div>
-  <div id="navLed" class="led blue"></div>
-  <div id="engineLed" class="led green"></div>
+  <div id="powerLed" class="led"></div>
+  <div id="navLed" class="led"></div>
+  <div id="radarLed" class="led"></div>
+  <div id="bilgeLed" class="led"></div>
 </div>
 
 <div class="rpm-panel">
@@ -226,13 +262,14 @@ html,body{
   <div><span id="rpmValue">0</span> RPM</div>
   <div class="gauge">
     <div class="needle" id="needle"></div>
+    <div class="center-dot"></div>
   </div>
 </div>
 
 <div class="fuel-panel">
   FUEL
   <div class="fuel-bar">
-    <div class="fuel-fill" id="fuelFill"></div>
+    <div class="fuel-fill"></div>
   </div>
 </div>
 
@@ -241,8 +278,19 @@ html,body{
   <div class="ctrl" id="navBtn">NAV LIGHTS</div>
 </div>
 
+<!-- BRIDGE CONTROLS -->
+<div class="bridge-row">
+  <div class="small-btn" id="testBtn">TEST</div>
+  <div class="small-btn" id="autoBtn">AUTO</div>
+  <div class="small-btn" id="radarBtn">RADAR</div>
+  <div class="small-btn" id="bilgeBtn">BILGE</div>
+  <div class="small-btn" id="deckBtn">DECK</div>
+  <div class="small-btn" id="cabinBtn">CABIN</div>
 </div>
 
+</div>
+
+<!-- RIGHT -->
 <div class="section">
   <div class="big-btn left" id="leftBtn">LEFT</div>
   <div class="big-btn right" id="rightBtn">RIGHT</div>
@@ -252,25 +300,22 @@ html,body{
 
 <script>
 
-/* ===== ESP SETTINGS ===== */
 const ESP32_IP="172.27.4.37";
 function send(cmd){
  fetch(`http://${ESP32_IP}/command?cmd=${cmd}`).catch(()=>{});
 }
 
-/* ENGINE SYSTEM */
-let rpm=0,targetRPM=0,engineOn=false,navOn=false;
+let rpm=0,targetRPM=0,engineOn=false;
 
 setInterval(()=>{
- if(rpm<targetRPM) rpm+=50;
- else if(rpm>targetRPM) rpm-=30;
+ if(rpm<targetRPM) rpm+=60;
+ else if(rpm>targetRPM) rpm-=40;
  if(rpm<0) rpm=0;
  document.getElementById("rpmValue").innerText=Math.round(rpm);
  let angle=(rpm/6000)*180-90;
  document.getElementById("needle").style.transform="rotate("+angle+"deg)";
-},50);
+},40);
 
-/* ===== TOUCH + MOUSE SUPPORT FIX ===== */
 function press(cmd){
  if(!engineOn) return;
  targetRPM=4500;
@@ -290,7 +335,6 @@ function release(){
  btn.addEventListener("touchend",(e)=>{e.preventDefault();release();});
 });
 
-/* ENGINE */
 document.getElementById("engineBtn").onclick=function(){
  engineOn=!engineOn;
  this.classList.toggle("active");
@@ -299,12 +343,18 @@ document.getElementById("engineBtn").onclick=function(){
  targetRPM=engineOn?1000:0;
 };
 
-/* NAV */
 document.getElementById("navBtn").onclick=function(){
- navOn=!navOn;
  this.classList.toggle("active");
- send(navOn?"N_ON":"N_OFF");
+ document.getElementById("navLed").classList.toggle("blink");
 };
+
+["testBtn","autoBtn","radarBtn","bilgeBtn","deckBtn","cabinBtn"].forEach(id=>{
+ document.getElementById(id).onclick=function(){
+   this.classList.toggle("active");
+   if(id==="radarBtn") document.getElementById("radarLed").classList.toggle("blink");
+   if(id==="bilgeBtn") document.getElementById("bilgeLed").classList.toggle("blink");
+ };
+});
 
 </script>
 
