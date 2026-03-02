@@ -11,14 +11,14 @@ html,body{
   margin:0;
   padding:0;
   background:#000;
-  overflow:hidden;
   font-family:Arial;
   height:100%;
+  overflow:hidden;
   -webkit-user-select:none;
   user-select:none;
 }
 
-/* LANDSCAPE WARNING */
+/* ROTATE MESSAGE */
 #rotateMessage{
   position:fixed;
   inset:0;
@@ -28,47 +28,60 @@ html,body{
   justify-content:center;
   align-items:center;
   text-align:center;
-  font-size:22px;
+  font-size:20px;
   z-index:9999;
   padding:20px;
 }
 
-/* MAIN REMOTE */
+/* MAIN CONTAINER */
 .remote{
   width:100vw;
   height:100vh;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:20px;
+  padding:2vh;
   box-sizing:border-box;
   background:linear-gradient(90deg,#111,#222,#111);
 }
 
+/* SIDE SECTIONS */
 .section{
   display:flex;
   flex-direction:column;
+  justify-content:center;
   align-items:center;
-  gap:25px;
+  gap:3vh;
+  width:25%;
 }
 
+/* CENTER PANEL */
+.center-panel{
+  width:50%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2vh;
+}
+
+/* BIG BUTTONS */
 .big-btn{
-  width:180px;
-  height:120px;
-  border-radius:20px;
-  font-size:28px;
+  width:90%;
+  height:18vh;
+  border-radius:2vh;
+  font-size:3vh;
   font-weight:bold;
   display:flex;
   justify-content:center;
   align-items:center;
   cursor:pointer;
+  box-shadow:0 1vh #000;
   transition:0.1s;
-  box-shadow:0 8px #000;
 }
 
 .big-btn:active{
-  transform:translateY(6px);
-  box-shadow:0 2px #000;
+  transform:translateY(0.7vh);
+  box-shadow:0 0.2vh #000;
 }
 
 .forward{ background:#2ECC40; }
@@ -76,53 +89,46 @@ html,body{
 .left{ background:#FF851B; }
 .right{ background:#FFDC00; color:black; }
 
-.center-panel{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:15px;
-}
-
+/* PANELS */
 .rpm-panel,.fuel-panel{
-  width:240px;
+  width:90%;
   background:#111;
-  padding:10px;
-  border-radius:15px;
+  padding:1vh;
+  border-radius:2vh;
   text-align:center;
 }
 
-.rpm-panel{ color:#00ffcc; box-shadow:0 0 15px #00ffcc33; }
+.rpm-panel{ color:#00ffcc; }
 .fuel-panel{ color:#FFDC00; }
 
 .gauge{
-  width:200px;
-  height:100px;
-  border-top-left-radius:200px;
-  border-top-right-radius:200px;
+  width:80%;
+  height:12vh;
+  border-top-left-radius:50vh;
+  border-top-right-radius:50vh;
   background:#222;
   position:relative;
-  overflow:hidden;
   margin:auto;
+  overflow:hidden;
 }
 
 .needle{
-  width:4px;
-  height:100px;
+  width:0.5vh;
+  height:12vh;
   background:red;
   position:absolute;
   bottom:0;
   left:50%;
   transform-origin:bottom;
   transform:rotate(-90deg);
-  transition:0.15s ease-out;
+  transition:0.1s;
 }
 
 .fuel-bar{
   width:100%;
-  height:12px;
+  height:1.5vh;
   background:#222;
-  border-radius:10px;
-  margin-top:6px;
+  border-radius:1vh;
   overflow:hidden;
 }
 
@@ -130,124 +136,82 @@ html,body{
   height:100%;
   width:100%;
   background:#2ECC40;
-  transition:0.3s;
 }
 
+/* BUTTON ROW */
 .button-row{
-  width:260px;
+  width:90%;
   display:flex;
   justify-content:space-between;
 }
 
 .ctrl{
-  width:120px;
-  height:45px;
-  border-radius:25px;
+  width:48%;
+  height:5vh;
+  border-radius:3vh;
   background:#222;
   color:white;
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:14px;
-  cursor:pointer;
-  transition:0.2s;
+  font-size:1.8vh;
 }
 
 .ctrl.active{
   background:#2ECC40;
-  box-shadow:
-     0 0 15px #2ECC40,
-     0 0 30px #2ECC40,
-     inset 0 0 10px #fff;
+  box-shadow:0 0 15px #2ECC40;
 }
 
+/* LEDS */
 .led-row{
   display:flex;
-  gap:15px;
+  gap:2vh;
 }
 
 .led{
-  width:15px;
-  height:15px;
+  width:2vh;
+  height:2vh;
   border-radius:50%;
   background:#222;
 }
 
 .blink{
-  animation:blinkAnim 1s infinite;
+  animation:blink 1s infinite;
 }
 
-@keyframes blinkAnim{
+@keyframes blink{
   0%{opacity:0.2;}
   50%{opacity:1;}
   100%{opacity:0.2;}
 }
 
-.red{ background:red; }
-.green{ background:#2ECC40; }
-.blue{ background:#00c3ff; }
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:1100px){
-  .big-btn{
-    width:140px;
-    height:90px;
-    font-size:20px;
-  }
-  .rpm-panel,.fuel-panel{
-    width:200px;
-  }
-}
-
-@media(max-width:800px){
-  .remote{
-    padding:10px;
-  }
-  .big-btn{
-    width:110px;
-    height:75px;
-    font-size:16px;
-  }
-  .button-row{
-    width:200px;
-  }
-  .ctrl{
-    width:95px;
-    height:38px;
-    font-size:12px;
-  }
-}
-
+/* FORCE LANDSCAPE */
 @media (orientation:portrait){
-  #rotateMessage{
-    display:flex;
-  }
+  #rotateMessage{ display:flex; }
 }
 
 </style>
 </head>
 
-<body oncontextmenu="return false">
+<body>
 
 <div id="rotateMessage">
-⚠ Please rotate your device to Landscape Mode to use RC BOAT PRO
+⚠ Rotate your device to LANDSCAPE to use RC BOAT PRO
 </div>
 
 <div class="remote">
 
-<!-- LEFT SIDE -->
 <div class="section">
-  <div class="big-btn forward" onmousedown="accelerate('F')" onmouseup="releaseThrottle()">FORWARD</div>
-  <div class="big-btn backward" onmousedown="accelerate('B')" onmouseup="releaseThrottle()">BACK</div>
+  <div class="big-btn forward" id="forwardBtn">FORWARD</div>
+  <div class="big-btn backward" id="backBtn">BACK</div>
 </div>
 
-<!-- CENTER -->
 <div class="center-panel">
 
 <div class="led-row">
-  <div id="powerLed" class="led red"></div>
-  <div id="navLed" class="led blue"></div>
-  <div id="engineLed" class="led green"></div>
+  <div id="powerLed" class="led" style="background:red"></div>
+  <div id="navLed" class="led" style="background:#00c3ff"></div>
+  <div id="engineLed" class="led" style="background:#2ECC40"></div>
 </div>
 
 <div class="rpm-panel">
@@ -261,138 +225,72 @@ html,body{
 <div class="fuel-panel">
   FUEL
   <div class="fuel-bar">
-    <div class="fuel-fill" id="fuelFill"></div>
+    <div class="fuel-fill"></div>
   </div>
 </div>
 
 <div class="button-row">
-  <div class="ctrl" id="engineBtn" onclick="toggleEngine()">ENGINE</div>
-  <div class="ctrl" id="navBtn" onclick="toggleNav()">NAV LIGHTS</div>
-</div>
-
-<div class="button-row">
-  <div class="ctrl" onclick="fogSignal()">FOG</div>
-  <div class="ctrl" onclick="horn()">HORN</div>
-</div>
-
-<div class="button-row">
-  <div class="ctrl" onclick="anchor()">ANCHOR</div>
-  <div class="ctrl" onclick="emergencyStop()">STOP</div>
+  <div class="ctrl" id="engineBtn">ENGINE</div>
+  <div class="ctrl" id="navBtn">NAV LIGHTS</div>
 </div>
 
 </div>
 
-<!-- RIGHT SIDE -->
 <div class="section">
-  <div class="big-btn left" onmousedown="accelerate('L')" onmouseup="releaseThrottle()">LEFT</div>
-  <div class="big-btn right" onmousedown="accelerate('R')" onmouseup="releaseThrottle()">RIGHT</div>
+  <div class="big-btn left" id="leftBtn">LEFT</div>
+  <div class="big-btn right" id="rightBtn">RIGHT</div>
 </div>
 
 </div>
 
 <script>
 
-/* ===== PREVENT COPY & INSPECT ===== */
-document.addEventListener('keydown', function(e) {
- if (e.key === "F12" || 
-    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-    (e.ctrlKey && e.key === 'u')) {
-   e.preventDefault();
- }
-});
-
-/* ===== ESP SETTINGS ===== */
+/* ===== ESP ===== */
 const ESP32_IP="172.27.4.37";
-let lastCommand="";
-let commandLock=false;
-
 function send(cmd){
- if(commandLock && cmd===lastCommand) return;
- lastCommand=cmd;
- commandLock=true;
- setTimeout(()=>commandLock=false,200);
  fetch(`http://${ESP32_IP}/command?cmd=${cmd}`).catch(()=>{});
 }
 
-/* ENGINE SYSTEM */
-let rpm=0,targetRPM=0,engineOn=false,navOn=false;
+/* ENGINE */
+let rpm=0,targetRPM=0,engineOn=false;
 
 setInterval(()=>{
- if(rpm<targetRPM) rpm+=50;
- else if(rpm>targetRPM) rpm-=30;
+ if(rpm<targetRPM) rpm+=80;
+ else if(rpm>targetRPM) rpm-=60;
  if(rpm<0) rpm=0;
  document.getElementById("rpmValue").innerText=Math.round(rpm);
  let angle=(rpm/6000)*180-90;
  document.getElementById("needle").style.transform="rotate("+angle+"deg)";
-},50);
+},40);
 
-function accelerate(cmd){
+/* TOUCH + MOUSE SUPPORT */
+function press(cmd){
  if(!engineOn) return;
  targetRPM=4500;
  send(cmd);
 }
 
-function releaseThrottle(){
+function release(){
  if(engineOn) targetRPM=1000;
  send("STOP");
 }
 
-function toggleEngine(){
+["forwardBtn","backBtn","leftBtn","rightBtn"].forEach(id=>{
+ let btn=document.getElementById(id);
+ btn.addEventListener("mousedown",()=>press(btn.innerText[0]));
+ btn.addEventListener("mouseup",release);
+ btn.addEventListener("touchstart",(e)=>{e.preventDefault();press(btn.innerText[0]);});
+ btn.addEventListener("touchend",(e)=>{e.preventDefault();release();});
+});
+
+/* ENGINE TOGGLE */
+document.getElementById("engineBtn").onclick=function(){
  engineOn=!engineOn;
- let led=document.getElementById("engineLed");
- let powerLed=document.getElementById("powerLed");
- let btn=document.getElementById("engineBtn");
-
- if(engineOn){
-   targetRPM=1000;
-   led.classList.add("blink");
-   btn.classList.add("active");
-   powerLed.style.background="#2ECC40";
-   send("E_ON");
- }else{
-   targetRPM=0;
-   led.classList.remove("blink");
-   btn.classList.remove("active");
-   powerLed.style.background="red";
-   send("E_OFF");
- }
-}
-
-function toggleNav(){
- navOn=!navOn;
- let led=document.getElementById("navLed");
- let btn=document.getElementById("navBtn");
-
- if(navOn){
-   led.classList.add("blink");
-   btn.classList.add("active");
-   send("N_ON");
- }else{
-   led.classList.remove("blink");
-   btn.classList.remove("active");
-   send("N_OFF");
- }
-}
-
-function horn(){ send("HORN"); }
-function fogSignal(){ send("FOG"); }
-
-function anchor(){
- targetRPM=1000;
- alert("⚓ Anchor Deployed");
-}
-
-function emergencyStop(){
- targetRPM=0;
- engineOn=false;
- navOn=false;
- document.querySelectorAll(".blink").forEach(el=>el.classList.remove("blink"));
- document.querySelectorAll(".active").forEach(el=>el.classList.remove("active"));
- document.getElementById("powerLed").style.background="red";
- send("STOP");
- send("E_OFF");
- send("N_OFF");
-}
+ this.classList.toggle("active");
+ document.getElementById("powerLed").style.background=engineOn?"#2ECC40":"red";
+ send(engineOn?"E_ON":"E_OFF");
+ targetRPM=engineOn?1000:0;
+};
 
 </script>
 
