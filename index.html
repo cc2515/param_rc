@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>RC BOAT PRO</title>
 
 <style>
@@ -12,13 +12,14 @@ html,body{
   padding:0;
   background:#000;
   font-family:Arial;
-  height:100%;
-  overflow:hidden;
+  min-height:100vh;
+  height:100dvh;              /* FIXED MOBILE HEIGHT */
+  overflow:auto;              /* allow scroll on small phones */
   -webkit-user-select:none;
   user-select:none;
 }
 
-/* ROTATE MESSAGE */
+/* LANDSCAPE WARNING */
 #rotateMessage{
   position:fixed;
   inset:0;
@@ -28,60 +29,47 @@ html,body{
   justify-content:center;
   align-items:center;
   text-align:center;
-  font-size:20px;
+  font-size:22px;
   z-index:9999;
   padding:20px;
 }
 
-/* MAIN CONTAINER */
+/* MAIN REMOTE */
 .remote{
-  width:100vw;
-  height:100vh;
+  width:100%;
+  min-height:100dvh;          /* FIX */
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:2vh;
+  padding:20px;
   box-sizing:border-box;
   background:linear-gradient(90deg,#111,#222,#111);
 }
 
-/* SIDE SECTIONS */
 .section{
   display:flex;
   flex-direction:column;
-  justify-content:center;
   align-items:center;
-  gap:3vh;
-  width:25%;
+  gap:25px;
 }
 
-/* CENTER PANEL */
-.center-panel{
-  width:50%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:2vh;
-}
-
-/* BIG BUTTONS */
 .big-btn{
-  width:90%;
-  height:18vh;
-  border-radius:2vh;
-  font-size:3vh;
+  width:180px;
+  height:120px;
+  border-radius:20px;
+  font-size:28px;
   font-weight:bold;
   display:flex;
   justify-content:center;
   align-items:center;
   cursor:pointer;
-  box-shadow:0 1vh #000;
   transition:0.1s;
+  box-shadow:0 8px #000;
 }
 
 .big-btn:active{
-  transform:translateY(0.7vh);
-  box-shadow:0 0.2vh #000;
+  transform:translateY(6px);
+  box-shadow:0 2px #000;
 }
 
 .forward{ background:#2ECC40; }
@@ -89,46 +77,53 @@ html,body{
 .left{ background:#FF851B; }
 .right{ background:#FFDC00; color:black; }
 
-/* PANELS */
+.center-panel{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:15px;
+}
+
 .rpm-panel,.fuel-panel{
-  width:90%;
+  width:240px;
   background:#111;
-  padding:1vh;
-  border-radius:2vh;
+  padding:10px;
+  border-radius:15px;
   text-align:center;
 }
 
-.rpm-panel{ color:#00ffcc; }
+.rpm-panel{ color:#00ffcc; box-shadow:0 0 15px #00ffcc33; }
 .fuel-panel{ color:#FFDC00; }
 
 .gauge{
-  width:80%;
-  height:12vh;
-  border-top-left-radius:50vh;
-  border-top-right-radius:50vh;
+  width:200px;
+  height:100px;
+  border-top-left-radius:200px;
+  border-top-right-radius:200px;
   background:#222;
   position:relative;
-  margin:auto;
   overflow:hidden;
+  margin:auto;
 }
 
 .needle{
-  width:0.5vh;
-  height:12vh;
+  width:4px;
+  height:100px;
   background:red;
   position:absolute;
   bottom:0;
   left:50%;
   transform-origin:bottom;
   transform:rotate(-90deg);
-  transition:0.1s;
+  transition:0.15s ease-out;
 }
 
 .fuel-bar{
   width:100%;
-  height:1.5vh;
+  height:12px;
   background:#222;
-  border-radius:1vh;
+  border-radius:10px;
+  margin-top:6px;
   overflow:hidden;
 }
 
@@ -136,58 +131,70 @@ html,body{
   height:100%;
   width:100%;
   background:#2ECC40;
+  transition:0.3s;
 }
 
-/* BUTTON ROW */
 .button-row{
-  width:90%;
+  width:260px;
   display:flex;
   justify-content:space-between;
 }
 
 .ctrl{
-  width:48%;
-  height:5vh;
-  border-radius:3vh;
+  width:120px;
+  height:45px;
+  border-radius:25px;
   background:#222;
   color:white;
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:1.8vh;
+  font-size:14px;
+  cursor:pointer;
+  transition:0.2s;
 }
 
 .ctrl.active{
   background:#2ECC40;
-  box-shadow:0 0 15px #2ECC40;
+  box-shadow:
+     0 0 15px #2ECC40,
+     0 0 30px #2ECC40,
+     inset 0 0 10px #fff;
 }
 
-/* LEDS */
 .led-row{
   display:flex;
-  gap:2vh;
+  gap:15px;
 }
 
 .led{
-  width:2vh;
-  height:2vh;
+  width:15px;
+  height:15px;
   border-radius:50%;
   background:#222;
 }
 
 .blink{
-  animation:blink 1s infinite;
+  animation:blinkAnim 1s infinite;
 }
 
-@keyframes blink{
+@keyframes blinkAnim{
   0%{opacity:0.2;}
   50%{opacity:1;}
   100%{opacity:0.2;}
 }
 
-/* FORCE LANDSCAPE */
 @media (orientation:portrait){
-  #rotateMessage{ display:flex; }
+  #rotateMessage{
+    display:flex;
+  }
+}
+
+/* Small phone padding adjust only */
+@media(max-width:900px){
+  .remote{
+    padding:10px;
+  }
 }
 
 </style>
@@ -196,7 +203,7 @@ html,body{
 <body>
 
 <div id="rotateMessage">
-⚠ Rotate your device to LANDSCAPE to use RC BOAT PRO
+⚠ Please rotate your device to Landscape Mode to use RC BOAT PRO
 </div>
 
 <div class="remote">
@@ -209,9 +216,9 @@ html,body{
 <div class="center-panel">
 
 <div class="led-row">
-  <div id="powerLed" class="led" style="background:red"></div>
-  <div id="navLed" class="led" style="background:#00c3ff"></div>
-  <div id="engineLed" class="led" style="background:#2ECC40"></div>
+  <div id="powerLed" class="led red"></div>
+  <div id="navLed" class="led blue"></div>
+  <div id="engineLed" class="led green"></div>
 </div>
 
 <div class="rpm-panel">
@@ -225,7 +232,7 @@ html,body{
 <div class="fuel-panel">
   FUEL
   <div class="fuel-bar">
-    <div class="fuel-fill"></div>
+    <div class="fuel-fill" id="fuelFill"></div>
   </div>
 </div>
 
@@ -245,25 +252,25 @@ html,body{
 
 <script>
 
-/* ===== ESP ===== */
+/* ===== ESP SETTINGS ===== */
 const ESP32_IP="172.27.4.37";
 function send(cmd){
  fetch(`http://${ESP32_IP}/command?cmd=${cmd}`).catch(()=>{});
 }
 
-/* ENGINE */
-let rpm=0,targetRPM=0,engineOn=false;
+/* ENGINE SYSTEM */
+let rpm=0,targetRPM=0,engineOn=false,navOn=false;
 
 setInterval(()=>{
- if(rpm<targetRPM) rpm+=80;
- else if(rpm>targetRPM) rpm-=60;
+ if(rpm<targetRPM) rpm+=50;
+ else if(rpm>targetRPM) rpm-=30;
  if(rpm<0) rpm=0;
  document.getElementById("rpmValue").innerText=Math.round(rpm);
  let angle=(rpm/6000)*180-90;
  document.getElementById("needle").style.transform="rotate("+angle+"deg)";
-},40);
+},50);
 
-/* TOUCH + MOUSE SUPPORT */
+/* ===== TOUCH + MOUSE SUPPORT FIX ===== */
 function press(cmd){
  if(!engineOn) return;
  targetRPM=4500;
@@ -283,13 +290,20 @@ function release(){
  btn.addEventListener("touchend",(e)=>{e.preventDefault();release();});
 });
 
-/* ENGINE TOGGLE */
+/* ENGINE */
 document.getElementById("engineBtn").onclick=function(){
  engineOn=!engineOn;
  this.classList.toggle("active");
  document.getElementById("powerLed").style.background=engineOn?"#2ECC40":"red";
  send(engineOn?"E_ON":"E_OFF");
  targetRPM=engineOn?1000:0;
+};
+
+/* NAV */
+document.getElementById("navBtn").onclick=function(){
+ navOn=!navOn;
+ this.classList.toggle("active");
+ send(navOn?"N_ON":"N_OFF");
 };
 
 </script>
